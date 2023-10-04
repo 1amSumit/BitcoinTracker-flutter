@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import "package:bcttracker/constants/coin_data.dart";
+import 'package:flutter/cupertino.dart';
+import 'dart:io' show Platform;
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -11,6 +13,43 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   String? selectedCurrency = "INR";
+
+  DropdownButton<String> androidDropDownButton() {
+    List<DropdownMenuItem<String>> dropDownItems = [];
+    for (String currency in currenciesList) {
+      var newItem = DropdownMenuItem(
+        child: Text(currency),
+        value: currency,
+      );
+      dropDownItems.add(newItem);
+    }
+    return DropdownButton<String>(
+      value: selectedCurrency,
+      items: dropDownItems,
+      onChanged: (value) {
+        setState(() {
+          selectedCurrency = value;
+        });
+      },
+    );
+  }
+
+  CupertinoPicker iosCupertinoPicker() {
+    List<Text> items = [];
+    for (String currency in currenciesList) {
+      items.add(
+        Text(currency),
+      );
+    }
+    return CupertinoPicker(
+      itemExtent: 36.0,
+      onSelectedItemChanged: (selectedIndex) {
+        print(selectedIndex);
+      },
+      children: items,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -175,32 +214,14 @@ class _MainScreenState extends State<MainScreen> {
             ),
             Expanded(
               child: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(color: Colors.grey[800]),
-                  // height: 60.0,
-                  child: DropdownButton<String>(
-                    value: selectedCurrency,
-                    items: [
-                      DropdownMenuItem(
-                        child: Text("INR"),
-                        value: "INR",
-                      ),
-                      DropdownMenuItem(
-                        child: Text("USD"),
-                        value: "USD",
-                      ),
-                      DropdownMenuItem(
-                        child: Text("EUR"),
-                        value: "EUR",
-                      ),
-                    ],
-                    onChanged: (value) {
-                      setState(() {
-                        selectedCurrency = value;
-                      });
-                    },
-                  )),
-            )
+                alignment: Alignment.center,
+                decoration: BoxDecoration(color: Colors.grey[800]),
+                // height: 60.0,
+                child: Platform.isAndroid
+                    ? androidDropDownButton()
+                    : iosCupertinoPicker(),
+              ),
+            ),
           ],
         ),
       ),
