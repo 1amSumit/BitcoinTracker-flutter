@@ -1,3 +1,4 @@
+import 'package:bcttracker/services/networking.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import "package:bcttracker/constants/coin_data.dart";
@@ -14,6 +15,8 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   String? selectedCurrency = "INR";
 
+  final String url = "https://rest.coinapi.io/v1/exchangerate";
+
   DropdownButton<String> androidDropDownButton() {
     List<DropdownMenuItem<String>> dropDownItems = [];
     for (String currency in currenciesList) {
@@ -29,9 +32,38 @@ class _MainScreenState extends State<MainScreen> {
       onChanged: (value) {
         setState(() {
           selectedCurrency = value;
+          getcryptoData("BTC", value);
         });
       },
     );
+  }
+
+  void getcryptoDataBTC(currency) async {
+    Networking network = Networking();
+    var res = await network.getData(
+        '$url/BTC/$currency?apikey=9F1B4A22-E024-4FA7-85C2-CB7718DD309F');
+    print(res);
+  }
+
+  void getcryptoDataETH(currency) async {
+    Networking network = Networking();
+    var res = await network.getData(
+        '$url/ETH/$currency?apikey=9F1B4A22-E024-4FA7-85C2-CB7718DD309F');
+    print(res);
+  }
+
+  void getcryptoDataDoge(currency) async {
+    Networking network = Networking();
+    var res = await network.getData(
+        '$url/BTC/$currency?apikey=9F1B4A22-E024-4FA7-85C2-CB7718DD309F');
+    print(res);
+  }
+
+  void getcryptoDataRipple(currency) async {
+    Networking network = Networking();
+    var res = await network.getData(
+        '$url/BTC/$currency?apikey=9F1B4A22-E024-4FA7-85C2-CB7718DD309F');
+    print(res);
   }
 
   CupertinoPicker iosCupertinoPicker() {
