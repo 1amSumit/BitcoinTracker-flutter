@@ -38,6 +38,7 @@ class CoinData {
       double rate = res["rate"];
       cryptoRate[crypto] = rate.toStringAsFixed(0);
     }
+    print(cryptoRate);
     return cryptoRate;
   }
 }

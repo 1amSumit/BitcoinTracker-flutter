@@ -1,7 +1,6 @@
 import 'package:bcttracker/constants/colors.dart';
-import 'package:bcttracker/screens/mainScreen.dart';
+import 'package:bcttracker/screens/loadingScreen.dart';
 import 'package:flutter/material.dart';
-// import 'screens/loadingScreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,7 +19,7 @@ class MyApp extends StatelessWidget {
         ),
         scaffoldBackgroundColor: const Color(0xFF000000),
       ),
-      home: MainScreen(),
+      home: LoadingScreen(),
     );
   }
 }

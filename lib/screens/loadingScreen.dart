@@ -1,3 +1,4 @@
+import 'package:bcttracker/constants/coin_data.dart';
 import 'package:bcttracker/screens/mainScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -13,18 +14,21 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
     super.initState();
-    loadMainScreen();
+    getData();
   }
 
-  void loadMainScreen() {
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (context) {
-    //       return MainScreen();
-    //     },
-    //   ),
-    // );
+  void getData() async {
+    var data = await CoinData().getCryptoData("INR");
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return MainScreen(
+            coinDatas: data,
+          );
+        },
+      ),
+    );
   }
 
   @override

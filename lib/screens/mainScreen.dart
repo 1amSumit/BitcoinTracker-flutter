@@ -5,32 +5,47 @@ import 'package:flutter/cupertino.dart';
 import 'dart:io' show Platform;
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  MainScreen({this.coinDatas});
+
+  final coinDatas;
 
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
+  @override
+  void initState() {
+    super.initState();
+    updateUI(widget.coinDatas);
+  }
+
   String? selectedCurrency = "INR";
 
   String btcRate = "";
   String ethRate = "";
   String dogeRate = "";
   String ltcRate = "";
+  bool isWating = false;
 
   void getData() async {
+    isWating = true;
     try {
       var data = await CoinData().getCryptoData(selectedCurrency);
-      setState(() {
-        btcRate = data["BTC"];
-        ethRate = data["ETH"];
-        dogeRate = data["DOGE"];
-        ltcRate = data["LTC"];
-      });
+      isWating = false;
+      updateUI(data);
     } catch (error) {
       print(error);
     }
+  }
+
+  void updateUI(dynamic data) {
+    setState(() {
+      btcRate = data["BTC"];
+      ethRate = data["ETH"];
+      dogeRate = data["DOGE"];
+      ltcRate = data["LTC"];
+    });
   }
 
   DropdownButton<String> androidDropDownButton() {
@@ -68,12 +83,6 @@ class _MainScreenState extends State<MainScreen> {
       },
       children: items,
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getData();
   }
 
   @override
@@ -122,7 +131,7 @@ class _MainScreenState extends State<MainScreen> {
                       Row(
                         children: [
                           Text(
-                            btcRate,
+                            isWating ? "?" : btcRate,
                             style: TextStyle(
                                 fontSize: 30.0, fontWeight: FontWeight.bold),
                           ),
@@ -172,7 +181,7 @@ class _MainScreenState extends State<MainScreen> {
                       Row(
                         children: [
                           Text(
-                            ethRate,
+                            isWating ? "?" : ethRate,
                             style: TextStyle(
                                 fontSize: 30.0, fontWeight: FontWeight.bold),
                           ),
@@ -218,7 +227,7 @@ class _MainScreenState extends State<MainScreen> {
                       Row(
                         children: [
                           Text(
-                            dogeRate,
+                            isWating ? "?" : dogeRate,
                             style: TextStyle(
                                 fontSize: 30.0, fontWeight: FontWeight.bold),
                           ),
@@ -261,7 +270,7 @@ class _MainScreenState extends State<MainScreen> {
                       Row(
                         children: [
                           Text(
-                            ltcRate,
+                            isWating ? "?" : ltcRate,
                             style: TextStyle(
                                 fontSize: 30.0, fontWeight: FontWeight.bold),
                           ),
