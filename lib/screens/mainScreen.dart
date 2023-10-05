@@ -1,4 +1,3 @@
-import 'package:bcttracker/services/networking.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import "package:bcttracker/constants/coin_data.dart";
@@ -15,7 +14,24 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   String? selectedCurrency = "INR";
 
-  final String url = "https://rest.coinapi.io/v1/exchangerate";
+  String btcRate = "";
+  String ethRate = "";
+  String dogeRate = "";
+  String ltcRate = "";
+
+  void getData() async {
+    try {
+      var data = await CoinData().getCryptoData(selectedCurrency);
+      setState(() {
+        btcRate = data["BTC"];
+        ethRate = data["ETH"];
+        dogeRate = data["DOGE"];
+        ltcRate = data["LTC"];
+      });
+    } catch (error) {
+      print(error);
+    }
+  }
 
   DropdownButton<String> androidDropDownButton() {
     List<DropdownMenuItem<String>> dropDownItems = [];
@@ -32,38 +48,10 @@ class _MainScreenState extends State<MainScreen> {
       onChanged: (value) {
         setState(() {
           selectedCurrency = value;
-          getcryptoData("BTC", value);
+          getData();
         });
       },
     );
-  }
-
-  void getcryptoDataBTC(currency) async {
-    Networking network = Networking();
-    var res = await network.getData(
-        '$url/BTC/$currency?apikey=9F1B4A22-E024-4FA7-85C2-CB7718DD309F');
-    print(res);
-  }
-
-  void getcryptoDataETH(currency) async {
-    Networking network = Networking();
-    var res = await network.getData(
-        '$url/ETH/$currency?apikey=9F1B4A22-E024-4FA7-85C2-CB7718DD309F');
-    print(res);
-  }
-
-  void getcryptoDataDoge(currency) async {
-    Networking network = Networking();
-    var res = await network.getData(
-        '$url/BTC/$currency?apikey=9F1B4A22-E024-4FA7-85C2-CB7718DD309F');
-    print(res);
-  }
-
-  void getcryptoDataRipple(currency) async {
-    Networking network = Networking();
-    var res = await network.getData(
-        '$url/BTC/$currency?apikey=9F1B4A22-E024-4FA7-85C2-CB7718DD309F');
-    print(res);
   }
 
   CupertinoPicker iosCupertinoPicker() {
@@ -80,6 +68,12 @@ class _MainScreenState extends State<MainScreen> {
       },
       children: items,
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
   }
 
   @override
@@ -125,10 +119,22 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                   Row(
                     children: [
-                      Text(
-                        "3000 $selectedCurrency",
-                        style: TextStyle(
-                            fontSize: 30.0, fontWeight: FontWeight.bold),
+                      Row(
+                        children: [
+                          Text(
+                            btcRate,
+                            style: TextStyle(
+                                fontSize: 30.0, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            width: 8.0,
+                          ),
+                          Text(
+                            "$selectedCurrency",
+                            style: TextStyle(
+                                fontSize: 30.0, fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       )
                     ],
                   ),
@@ -163,10 +169,22 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                   Row(
                     children: [
-                      Text(
-                        "3000 $selectedCurrency",
-                        style: TextStyle(
-                            fontSize: 30.0, fontWeight: FontWeight.bold),
+                      Row(
+                        children: [
+                          Text(
+                            ethRate,
+                            style: TextStyle(
+                                fontSize: 30.0, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            width: 8.0,
+                          ),
+                          Text(
+                            "$selectedCurrency",
+                            style: TextStyle(
+                                fontSize: 30.0, fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       )
                     ],
                   ),
@@ -197,10 +215,22 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                   Row(
                     children: [
-                      Text(
-                        "3000 $selectedCurrency",
-                        style: TextStyle(
-                            fontSize: 30.0, fontWeight: FontWeight.bold),
+                      Row(
+                        children: [
+                          Text(
+                            dogeRate,
+                            style: TextStyle(
+                                fontSize: 30.0, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            width: 8.0,
+                          ),
+                          Text(
+                            "$selectedCurrency",
+                            style: TextStyle(
+                                fontSize: 30.0, fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       )
                     ],
                   ),
@@ -223,18 +253,27 @@ class _MainScreenState extends State<MainScreen> {
                         "Current Rate",
                         style: TextStyle(color: Colors.grey[500]),
                       ),
-                      const ImageIcon(
-                        AssetImage("images/rip.png"),
-                        size: 40.0,
-                      )
+                      const Icon(FontAwesomeIcons.litecoinSign)
                     ],
                   ),
                   Row(
                     children: [
-                      Text(
-                        "3000 $selectedCurrency",
-                        style: TextStyle(
-                            fontSize: 30.0, fontWeight: FontWeight.bold),
+                      Row(
+                        children: [
+                          Text(
+                            ltcRate,
+                            style: TextStyle(
+                                fontSize: 30.0, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            width: 8.0,
+                          ),
+                          Text(
+                            "$selectedCurrency",
+                            style: TextStyle(
+                                fontSize: 30.0, fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       )
                     ],
                   ),
